@@ -4,6 +4,7 @@ import urllib2
 import urlparse
 import cookielib
 import re
+import StringIO
 try:
     import json 
 except ImportError:
