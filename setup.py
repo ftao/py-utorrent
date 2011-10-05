@@ -22,10 +22,10 @@ setup(name='py-utorrent',
       include_package_data=True,
       zip_safe=False,
       install_requires=[
-            'httplib2',
+            'simplejson',
             ],
       tests_require=[
-            'httplib2',
+            'simplejson',
             ],
       )
 

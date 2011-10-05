@@ -45,18 +45,33 @@ class UTorrentClient(object):
         return match.group(1)
 
     def action_getfiles(self, hash, **kwargs):
-        args = {'action' : 'getfiles', 'hash' : hash}
-        args.update(kwargs)
-        return self.action(**args)
+        params = [('action', 'getfiles'), ('hash', hash)]
+        params += kwargs.items()
+        return self._action(params)
         
     def action_list(self, **kwargs):
-        args = {'list' : '1'}
-        args.update(kwargs)
-        return self.action(**args)
+        params = [('list', '1')]
+        params += kwargs.items()
+        return self._action(params)
 
-    def action(self, **kwargs):
+    def action_setprio(self, hash, priority, files):
+        params = [('action', 'setprio'), ('hash', hash), ('p', str(priority))]
+        if type(files) in (list, tuple):
+            for file_index in files:
+                params.append(('f', str(file_index)))
+        else:
+            params.append(('f', str(files)))
+
+        return self._action(params)
+
+        
+    def _action(self, params):
         #about token, see https://github.com/bittorrent/webui/wiki/TokenSystem
-        url = self.base_url + '?token=' + self.token + '&' + urllib.urlencode(kwargs)
-        response = self.opener.open(url)
-        return response.code, json.loads(response.read())
+        url = self.base_url + '?token=' + self.token + '&' + urllib.urlencode(params)
+        try:
+            response = self.opener.open(url)
+            return response.code, json.loads(response.read())
+        except urllib2.HTTPError,e:
+            print e.read()
+            raise
         
