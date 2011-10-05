@@ -78,7 +78,7 @@ class UTorrentClient(object):
         if filepath is not None:
             file_handler = open(filepath)
         else:
-            file_handler = StringIO(bytes)
+            file_handler = StringIO.StringIO(bytes)
             
         form.add_file('torrent_file', filename, file_handler)
 
