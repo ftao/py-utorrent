@@ -53,6 +53,30 @@ class UTorrentClient(object):
         params += kwargs.items()
         return self._action(params)
 
+    def start(self, *hashes):
+        params = [('action', 'start'),]
+        for hash in hashes:
+            params.append(('hash', hash))
+        return self._action(params)
+        
+    def stop(self, *hashes):
+        params = [('action', 'stop'),]
+        for hash in hashes:
+            params.append(('hash', hash))
+        return self._action(params)
+ 
+    def pause(self, *hashes):
+        params = [('action', 'pause'),]
+        for hash in hashes:
+            params.append(('hash', hash))
+        return self._action(params)
+ 
+    def forcestart(self, *hashes):
+        params = [('action', 'forcestart'),]
+        for hash in hashes:
+            params.append(('hash', hash))
+        return self._action(params)
+ 
     def getfiles(self, hash):
         params = [('action', 'getfiles'), ('hash', hash)]
         return self._action(params)
@@ -61,13 +85,10 @@ class UTorrentClient(object):
         params = [('action', 'getprops'), ('hash', hash)]
         return self._action(params)
         
-    def setprio(self, hash, priority, files):
+    def setprio(self, hash, priority, *files):
         params = [('action', 'setprio'), ('hash', hash), ('p', str(priority))]
-        if type(files) in (list, tuple):
-            for file_index in files:
-                params.append(('f', str(file_index)))
-        else:
-            params.append(('f', str(files)))
+        for file_index in files:
+            params.append(('f', str(file_index)))
 
         return self._action(params)
         
@@ -80,7 +101,7 @@ class UTorrentClient(object):
         else:
             file_handler = StringIO.StringIO(bytes)
             
-        form.add_file('torrent_file', filename, file_handler)
+        form.add_file('torrent_file', filename.encode('utf-8'), file_handler)
 
         return self._action(params, str(form), form.get_content_type())
 
@@ -99,5 +120,5 @@ class UTorrentClient(object):
             response = self.opener.open(request)
             return response.code, json.loads(response.read())
         except urllib2.HTTPError,e:
-            raise
+            raise 
         
