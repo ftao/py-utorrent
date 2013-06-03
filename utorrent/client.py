@@ -97,7 +97,7 @@ class UTorrentClient(object):
 
         form = MultiPartForm()
         if filepath is not None:
-            file_handler = open(filepath)
+            file_handler = open(filepath,'rb')
         else:
             file_handler = StringIO.StringIO(bytes)
             
