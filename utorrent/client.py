@@ -85,6 +85,14 @@ class UTorrentClient(object):
         params = [('action', 'getprops'), ('hash', hash)]
         return self._action(params)
         
+    def setprops(self, hash, **kvpairs):
+        params = [('action', 'setprops'), ('hash', hash)]
+        for k, v in kvpairs.iteritems():
+            params.append( ("s", k) )
+            params.append( ("v", v) )
+
+        return self._action(params)
+
     def setprio(self, hash, priority, *files):
         params = [('action', 'setprio'), ('hash', hash), ('p', str(priority))]
         for file_index in files:
