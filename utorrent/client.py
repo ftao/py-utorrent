@@ -113,6 +113,10 @@ class UTorrentClient(object):
 
         return self._action(params, str(form), form.get_content_type())
 
+    def addurl(self, url):
+        params = [('action', 'add-url'), ('s', url)]
+        self._action(params)
+
     def _action(self, params, body=None, content_type=None):
         #about token, see https://github.com/bittorrent/webui/wiki/TokenSystem
         url = self.base_url + '?token=' + self.token + '&' + urllib.urlencode(params)
