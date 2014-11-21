@@ -116,6 +116,18 @@ class UTorrentClient(object):
     def addurl(self, url):
         params = [('action', 'add-url'), ('s', url)]
         self._action(params)
+        
+    def remove(self, *hashes):
+        params = [('action', 'remove'),]
+        for hash in hashes:
+            params.append(('hash', hash))
+        return self._action(params)	
+		
+    def removedata(self, *hashes):
+        params = [('action', 'removedata'),]
+        for hash in hashes:
+            params.append(('hash', hash))
+        return self._action(params)	
 
     def _action(self, params, body=None, content_type=None):
         #about token, see https://github.com/bittorrent/webui/wiki/TokenSystem
